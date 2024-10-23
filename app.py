@@ -2,8 +2,37 @@ import os
 from gtts import gTTS
 import streamlit as st
 
+# Custom CSS for styling
+st.markdown("""
+    <style>
+        body {
+            background-color: #e0f7fa;  /* Light blue background */
+            color: #2c3e50;  /* Dark text color */
+        }
+        .stButton {
+            background-color: #2980b9;  /* Dark blue button */
+            color: white;  /* White text */
+            font-weight: bold;  /* Bold text */
+        }
+        .stButton:hover {
+            background-color: #3498db;  /* Lighter blue on hover */
+        }
+        .watermark {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 # Title of the app
 st.title("International Text-to-Speech App")
+
+# Optional: Add a watermark (language symbols or any background image)
+# You can replace 'watermark.png' with the path to your own image file
+st.markdown('<img class="watermark" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Flag_of_the_United_Nations.svg/1200px-Flag_of_the_United_Nations.svg.png" width="200" />', unsafe_allow_html=True)
 
 # Create a placeholder for the text area
 text_placeholder = st.empty()
