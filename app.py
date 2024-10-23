@@ -3,7 +3,7 @@ from gtts import gTTS
 import streamlit as st
 
 # Title of the app
-st.title("Text-to-Speech App")
+st.title("International-Text-to-Speech App")
 
 # Text input
 text = st.text_area("Enter text here", "یہ ایک ٹیسٹ ہے")  # Default Urdu text
@@ -21,18 +21,30 @@ language_options = {
 
 language = st.selectbox("Select Language", list(language_options.keys()))
 
+# Generate Speech Button
 if st.button("Generate Speech"):
-    # Create TTS
-    tts = gTTS(text=text, lang=language_options[language])
-    
-    # Save to a temporary file
-    temp_file = "output.mp3"
-    tts.save(temp_file)
-    
-    # Play audio
-    audio_file = open(temp_file, "rb")
-    st.audio(audio_file.read(), format='audio/mp3')
-    audio_file.close()
-    
-    # Clean up temporary file
-    os.remove(temp_file)
+    # Check if text input matches selected language
+    if (language == "Urdu" and not text.strip()) or (language != "Urdu" and text.strip().isspace()):
+        st.error("Please enter valid text.")
+    else:
+        try:
+            # Create TTS
+            tts = gTTS(text=text, lang=language_options[language])
+            
+            # Save to a temporary file
+            temp_file = "output.mp3"
+            tts.save(temp_file)
+            
+            # Play audio
+            audio_file = open(temp_file, "rb")
+            st.audio(audio_file.read(), format='audio/mp3')
+            audio_file.close()
+            
+            # Clean up temporary file
+            os.remove(temp_file)
+        except Exception as e:
+            st.error("Please select the correct output language.")
+
+# Clear Button
+if st.button("Reset"):
+    st.experimental_rerun()
