@@ -1,16 +1,23 @@
-# Step 1: Install gTTS
-!pip install gTTS
+# app.py
 
-# Step 2: Import necessary libraries
 from gtts import gTTS
-from IPython.display import Audio
+from io import BytesIO
+import streamlit as st
 
-# Step 3: Define the text and create TTS
-text = "Hello! This is a text-to-speech test using Google Text-to-Speech."
-tts = gTTS(text=text, lang='en')
+# Title of the app
+st.title("Text-to-Speech App")
 
-# Step 4: Save the audio file
-tts.save("output.mp3")
+# Text input
+text = st.text_area("Enter text here", "Key Atlantic current could collapse soon, 'impacting the entire world for centuries to come,' leading climate scientists warn.")
 
-# Step 5: Play the audio
-Audio("output.mp3")
+if st.button("Generate Speech"):
+    # Create TTS
+    tts = gTTS(text=text, lang='en')
+
+    # Save to a BytesIO object
+    audio_bytes = BytesIO()
+    tts.save(audio_bytes)
+    audio_bytes.seek(0)
+
+    # Play audio
+    st.audio(audio_bytes, format='audio/mp3')
