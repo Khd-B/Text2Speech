@@ -1,30 +1,37 @@
-# app.py
-
-import os
-from gtts import gTTS
 import streamlit as st
+from gtts import gTTS
+from IPython.display import Audio
 
-# Title of the app
-st.title("Text-to-Speech App")
+# Function to generate speech
+def generate_speech(text, lang='en'):
+    tts = gTTS(text=text, lang=lang)
+    audio_file = "output.mp3"
+    tts.save(audio_file)
+    return audio_file
 
-# Text input
-text = st.text_area("Enter text here", "یہ ایک ٹیسٹ ہے")  # Default Urdu text
+# Streamlit App
+st.title("Text to Speech Converter")
 
 # Language selection
-language = st.selectbox("Select Language", ["en", "en-uk", "en-au", "es", "fr", "ur"])
+lang = st.selectbox("Select Language", ["English", "Urdu", "Punjabi"])
 
+# Language mapping
+lang_mapping = {
+    "English": 'en',
+    "Urdu": 'ur',
+    "Punjabi": 'pa'
+}
+
+# Get the selected language code
+lang_code = lang_mapping.get(lang, 'en')
+
+# Text input
+text_input = st.text_area("Enter text:")
+
+# Generate speech button
 if st.button("Generate Speech"):
-    # Create TTS
-    tts = gTTS(text=text, lang=language)
-    
-    # Save to a temporary file
-    temp_file = "output.mp3"
-    tts.save(temp_file)
-    
-    # Play audio
-    audio_file = open(temp_file, "rb")
-    st.audio(audio_file.read(), format='audio/mp3')
-    audio_file.close()
-    
-    # Clean up temporary file
-    os.remove(temp_file)
+    if text_input:
+        audio_file = generate_speech(text_input, lang_code)
+        st.audio(audio_file, format='audio/mp3')
+    else:
+        st.error("Please enter some text.")
