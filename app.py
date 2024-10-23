@@ -26,19 +26,19 @@ def is_valid_language(text, language):
     text = text.strip()
 
     if language == "Urdu":
-        return any('\u0600' <= char <= '\u06FF' for char in text)  # Check for Urdu characters
+        return any('\u0600' <= char <= '\u06FF' for char in text)  # Urdu characters
     elif language == "Arabic":
-        return any('\u0600' <= char <= '\u06FF' for char in text)  # Check for Arabic characters
+        return any('\u0600' <= char <= '\u06FF' for char in text)  # Arabic characters
     elif language == "Chinese (Mandarin)":
-        return any('\u4E00' <= char <= '\u9FFF' for char in text)  # Check for Chinese characters
+        return any('\u4E00' <= char <= '\u9FFF' for char in text)  # Chinese characters
     elif language == "Russian":
-        return any('\u0400' <= char <= '\u04FF' for char in text)  # Check for Cyrillic characters
+        return any('\u0400' <= char <= '\u04FF' for char in text)  # Cyrillic characters
     elif language == "British English":
-        return all(char.isascii() for char in text) and any(text)  # Check for ASCII for English
+        return all(char.isascii() for char in text) and text  # Only ASCII for English
     elif language == "Spanish":
-        return all(char.isascii() for char in text) and any(text)  # Check for ASCII for Spanish
+        return all(char.isascii() for char in text) and text  # Only ASCII for Spanish
     elif language == "French":
-        return all(char.isascii() for char in text) and any(text)  # Check for ASCII for French
+        return all(char.isascii() for char in text) and text  # Only ASCII for French
 
     return False
 
@@ -47,7 +47,6 @@ button_enabled = is_valid_language(text, language)
 
 # Generate Speech Button
 if st.button("Generate Speech", disabled=not button_enabled):
-    # Check if text input is valid
     if not text.strip():
         st.error("Please enter valid text.")
     else:
