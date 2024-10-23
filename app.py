@@ -1,6 +1,10 @@
 import os
 from gtts import gTTS
 import streamlit as st
+from googletrans import Translator
+
+# Initialize the translator
+translator = Translator()
 
 # Title of the app
 st.title("International Text-to-Speech App")
@@ -21,15 +25,35 @@ language_options = {
 
 language = st.selectbox("Select Language", list(language_options.keys()))
 
+# Function to check if the text is in the selected language
+def is_valid_language(text, language):
+    if language == "Urdu":
+        return all('\u0600' <= char <= '\u06FF' for char in text)  # Urdu character range
+    elif language == "Arabic":
+        return all('\u0600' <= char <= '\u06FF' for char in text)  # Arabic character range
+    elif language == "Chinese (Mandarin)":
+        return any('\u4E00' <= char <= '\u9FFF' for char in text)  # Chinese character range
+    elif language == "Russian":
+        return all('\u0400' <= char <= '\u04FF' for char in text)  # Cyrillic character range
+    elif language == "Spanish" or language == "French" or language == "British English":
+        return all(char.isascii() for char in text)  # Check for ASCII for English/Spanish/French
+    return False
+
+# Check if button should be enabled
+button_enabled = is_valid_language(text, language)
+
 # Generate Speech Button
-if st.button("Generate Speech"):
-    # Check if text input matches selected language
-    if (language == "Urdu" and not text.strip()) or (language != "Urdu" and text.strip().isspace()):
+if st.button("Generate Speech", disabled=not button_enabled):
+    # Check if text input is valid
+    if not text.strip():
         st.error("Please enter valid text.")
     else:
         try:
+            # Translate text to the selected language
+            translated_text = translator.translate(text, dest=language_options[language]).text
+            
             # Create TTS
-            tts = gTTS(text=text, lang=language_options[language])
+            tts = gTTS(text=translated_text, lang=language_options[language])
             
             # Save to a temporary file
             temp_file = "output.mp3"
@@ -43,4 +67,4 @@ if st.button("Generate Speech"):
             # Clean up temporary file
             os.remove(temp_file)
         except Exception as e:
-            st.error("Please select the correct output language.")
+            st.error("Error during translation or speech generation: {}".format(e))
