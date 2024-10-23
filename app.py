@@ -21,29 +21,8 @@ language_options = {
 
 language = st.selectbox("Select Language", list(language_options.keys()))
 
-# Function to check if the text is in the selected language
-def is_valid_language(text, language):
-    text = text.strip()
-
-    if language == "Urdu":
-        return any('\u0600' <= char <= '\u06FF' for char in text)  # Urdu characters
-    elif language == "Arabic":
-        return any('\u0600' <= char <= '\u06FF' for char in text)  # Arabic characters
-    elif language == "Chinese (Mandarin)":
-        return any('\u4E00' <= char <= '\u9FFF' for char in text)  # Chinese characters
-    elif language == "Russian":
-        return any('\u0400' <= char <= '\u04FF' for char in text)  # Cyrillic characters
-    elif language == "British English":
-        return all(char.isascii() for char in text) and text  # Only ASCII for English
-    elif language == "Spanish":
-        return all(char.isascii() for char in text) and text  # Only ASCII for Spanish
-    elif language == "French":
-        return all(char.isascii() for char in text) and text  # Only ASCII for French
-
-    return False
-
-# Check if button should be enabled
-button_enabled = is_valid_language(text, language)
+# Enable the button by default
+button_enabled = True
 
 # Generate Speech Button
 if st.button("Generate Speech", disabled=not button_enabled):
@@ -70,4 +49,4 @@ if st.button("Generate Speech", disabled=not button_enabled):
 
 # Provide feedback about button state
 if not button_enabled:
-    st.warning("The 'Generate Speech' button will be enabled when the input text matches the selected language.")
+    st.warning("The 'Generate Speech' button is enabled by default.")
