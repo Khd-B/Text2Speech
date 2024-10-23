@@ -10,7 +10,7 @@ text = st.text_area("Enter text here", "یہ ایک ٹیسٹ ہے")  # Default U
 
 # Language selection
 language_options = {
-    "British English": "en-uk",
+    "English": "en",
     "Spanish": "es",
     "French": "fr",
     "Arabic": "ar",
