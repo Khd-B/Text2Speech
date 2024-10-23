@@ -8,10 +8,10 @@ import streamlit as st
 st.title("Text-to-Speech App")
 
 # Text input
-text = st.text_area("Enter text here", "Hello! This is a text-to-speech test using Google Text-to-Speech.")
+text = st.text_area("Enter text here", "یہ ایک ٹیسٹ ہے")  # Default Urdu text
 
 # Language selection
-language = st.selectbox("Select Language", ["en", "en-uk", "en-au", "es", "fr"])
+language = st.selectbox("Select Language", ["en", "en-uk", "en-au", "es", "fr", "ur"])
 
 if st.button("Generate Speech"):
     # Create TTS
