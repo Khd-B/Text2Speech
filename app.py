@@ -1,5 +1,6 @@
 import os
 from gtts import gTTS
+from pydub import AudioSegment
 import streamlit as st
 
 # Title of the app
@@ -10,7 +11,7 @@ text = st.text_area("Enter text here", "یہ ایک ٹیسٹ ہے")  # Default U
 
 # Language selection
 language_options = {
-    "English": "en",
+    "British English": "en-uk",
     "Spanish": "es",
     "French": "fr",
     "Arabic": "ar",
@@ -49,26 +50,33 @@ if st.button("Generate Speech"):
         try:
             # Chunk the text
             text_chunks = chunk_text(text)
-            audio_files = []
+            audio_segments = []
 
             # Process each chunk
-            for i, chunk in enumerate(text_chunks):
+            for chunk in text_chunks:
                 # Create TTS for each chunk
                 tts = gTTS(text=chunk, lang=language_options[language])
                 
                 # Save to a temporary file
-                temp_file = f"output_{i}.mp3"
+                temp_file = "temp_output.mp3"
                 tts.save(temp_file)
-                audio_files.append(temp_file)
+                
+                # Load the saved audio file
+                audio_segment = AudioSegment.from_mp3(temp_file)
+                audio_segments.append(audio_segment)
 
-            # Play all audio files sequentially
-            for audio_file in audio_files:
-                with open(audio_file, "rb") as file:
-                    st.audio(file.read(), format='audio/mp3')
+            # Concatenate all audio segments
+            final_audio = sum(audio_segments)
+            final_file = "final_output.mp3"
+            final_audio.export(final_file, format="mp3")
+
+            # Play the concatenated audio
+            with open(final_file, "rb") as file:
+                st.audio(file.read(), format='audio/mp3')
 
             # Clean up temporary files
-            for audio_file in audio_files:
-                os.remove(audio_file)
+            os.remove(temp_file)
+            os.remove(final_file)
 
         except Exception as e:
             st.error(f"Error during speech generation: {e}")
