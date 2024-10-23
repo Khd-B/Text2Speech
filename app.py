@@ -24,16 +24,17 @@ language = st.selectbox("Select Language", list(language_options.keys()))
 # Function to check if the text is in the selected language
 def is_valid_language(text, language):
     text = text.strip()
+    
     if language == "Urdu":
-        return any('\u0600' <= char <= '\u06FF' for char in text)  # Check for any Urdu character
+        return any('\u0600' <= char <= '\u06FF' for char in text)  # Check for Urdu characters
     elif language == "Arabic":
-        return any('\u0600' <= char <= '\u06FF' for char in text)  # Check for any Arabic character
+        return any('\u0600' <= char <= '\u06FF' for char in text)  # Check for Arabic characters
     elif language == "Chinese (Mandarin)":
-        return any('\u4E00' <= char <= '\u9FFF' for char in text)  # Check for any Chinese character
+        return any('\u4E00' <= char <= '\u9FFF' for char in text)  # Check for Chinese characters
     elif language == "Russian":
-        return any('\u0400' <= char <= '\u04FF' for char in text)  # Check for any Cyrillic character
+        return any('\u0400' <= char <= '\u04FF' for char in text)  # Check for Cyrillic characters
     elif language in ["Spanish", "French", "British English"]:
-        return all(char.isascii() for char in text)  # Check for ASCII characters for English/Spanish/French
+        return all(char.isascii() for char in text) and any(text)  # Check for ASCII characters for English/Spanish/French
     return False
 
 # Check if button should be enabled
