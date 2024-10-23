@@ -5,12 +5,13 @@ import streamlit as st
 # Title of the app
 st.title("International Text-to-Speech App")
 
-# Text input
-text = st.text_area("Enter text here", "یہ ایک ٹیسٹ ہے")  # Default Urdu text
+# Create a placeholder for the text area
+text_placeholder = st.empty()
+text = text_placeholder.text_area("Enter text here", "یہ ایک ٹیسٹ ہے")  # Default Urdu text
 
 # Language selection
 language_options = {
-    "English": "en",
+    "British English": "en-uk",
     "Spanish": "es",
     "French": "fr",
     "Arabic": "ar",
@@ -43,3 +44,7 @@ if st.button("Generate Speech"):
 
         except Exception as e:
             st.error(f"Error during speech generation: {e}")
+
+# Clear Button
+if st.button("Clear"):
+    text_placeholder.text_area("Enter text here", "")  # Reset the text area to empty
