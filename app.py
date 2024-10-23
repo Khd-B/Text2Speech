@@ -14,7 +14,7 @@ text = st.text_area("Enter text here", "یہ ایک ٹیسٹ ہے")  # Default U
 
 # Language selection
 language_options = {
-    "English": "en",
+    "British English": "en-uk",
     "Spanish": "es",
     "French": "fr",
     "Arabic": "ar",
@@ -27,16 +27,17 @@ language = st.selectbox("Select Language", list(language_options.keys()))
 
 # Function to check if the text is in the selected language
 def is_valid_language(text, language):
+    text = text.strip()
     if language == "Urdu":
-        return all('\u0600' <= char <= '\u06FF' for char in text)  # Urdu character range
+        return any('\u0600' <= char <= '\u06FF' for char in text)  # Check for any Urdu character
     elif language == "Arabic":
-        return all('\u0600' <= char <= '\u06FF' for char in text)  # Arabic character range
+        return any('\u0600' <= char <= '\u06FF' for char in text)  # Check for any Arabic character
     elif language == "Chinese (Mandarin)":
-        return any('\u4E00' <= char <= '\u9FFF' for char in text)  # Chinese character range
+        return any('\u4E00' <= char <= '\u9FFF' for char in text)  # Check for any Chinese character
     elif language == "Russian":
-        return all('\u0400' <= char <= '\u04FF' for char in text)  # Cyrillic character range
-    elif language == "Spanish" or language == "French" or language == "British English":
-        return all(char.isascii() for char in text)  # Check for ASCII for English/Spanish/French
+        return any('\u0400' <= char <= '\u04FF' for char in text)  # Check for any Cyrillic character
+    elif language in ["Spanish", "French", "British English"]:
+        return all(char.isascii() for char in text)  # Check for ASCII characters for English/Spanish/French
     return False
 
 # Check if button should be enabled
@@ -68,3 +69,7 @@ if st.button("Generate Speech", disabled=not button_enabled):
             os.remove(temp_file)
         except Exception as e:
             st.error("Error during translation or speech generation: {}".format(e))
+
+# Provide feedback about button state
+if not button_enabled:
+    st.warning("The 'Generate Speech' button will be enabled when the input text matches the selected language.")
