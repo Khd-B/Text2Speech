@@ -1,7 +1,7 @@
 import os
 from gtts import gTTS
 import streamlit as st
-from googletrans import Translator
+from googletrans import Translator, LANGUAGES
 
 # Initialize the translator
 translator = Translator()
@@ -53,22 +53,26 @@ if st.button("Generate Speech", disabled=not button_enabled):
             # Translate text to the selected language
             translated_text = translator.translate(text, dest=language_options[language]).text
             
-            # Create TTS
-            tts = gTTS(text=translated_text, lang=language_options[language])
-            
-            # Save to a temporary file
-            temp_file = "output.mp3"
-            tts.save(temp_file)
-            
-            # Play audio
-            audio_file = open(temp_file, "rb")
-            st.audio(audio_file.read(), format='audio/mp3')
-            audio_file.close()
-            
-            # Clean up temporary file
-            os.remove(temp_file)
+            # Check if translation was successful
+            if translated_text is None:
+                st.error("Translation failed. Please check the input.")
+            else:
+                # Create TTS
+                tts = gTTS(text=translated_text, lang=language_options[language])
+                
+                # Save to a temporary file
+                temp_file = "output.mp3"
+                tts.save(temp_file)
+                
+                # Play audio
+                audio_file = open(temp_file, "rb")
+                st.audio(audio_file.read(), format='audio/mp3')
+                audio_file.close()
+                
+                # Clean up temporary file
+                os.remove(temp_file)
         except Exception as e:
-            st.error("Error during translation or speech generation: {}".format(e))
+            st.error(f"Error during translation or speech generation: {e}")
 
 # Provide feedback about button state
 if not button_enabled:
