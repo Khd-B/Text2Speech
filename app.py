@@ -10,9 +10,12 @@ st.title("Text-to-Speech App")
 # Text input
 text = st.text_area("Enter text here", "Hello! This is a text-to-speech test using Google Text-to-Speech.")
 
+# Language selection
+language = st.selectbox("Select Language", ["en", "en-uk", "en-au", "es", "fr"])
+
 if st.button("Generate Speech"):
     # Create TTS
-    tts = gTTS(text=text, lang='en')
+    tts = gTTS(text=text, lang=language)
     
     # Save to a temporary file
     temp_file = "output.mp3"
