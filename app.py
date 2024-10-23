@@ -1,6 +1,6 @@
 import streamlit as st
 from gtts import gTTS
-from IPython.display import Audio
+import os
 
 # Function to generate speech
 def generate_speech(text, lang='en'):
@@ -33,5 +33,7 @@ if st.button("Generate Speech"):
     if text_input:
         audio_file = generate_speech(text_input, lang_code)
         st.audio(audio_file, format='audio/mp3')
+        # Optionally, delete the audio file after playing
+        os.remove(audio_file)
     else:
         st.error("Please enter some text.")
