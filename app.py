@@ -44,22 +44,3 @@ if st.button("Generate Speech"):
             os.remove(temp_file)
         except Exception as e:
             st.error("Please select the correct output language.")
-
-# Clear Button
-if st.button("Clear"):
-    # Clear the session state to reset inputs
-    st.session_state.clear()  # Clears all session state
-
-# Initialize state for text and language if not already set
-if 'text' not in st.session_state:
-    st.session_state.text = "یہ ایک ٹیسٹ ہے"
-if 'language' not in st.session_state:
-    st.session_state.language = list(language_options.keys())[0]  # Default to first option
-
-# Update text area and selectbox with session state
-text = st.text_area("Enter text here", st.session_state.text)
-language = st.selectbox("Select Language", list(language_options.keys()), index=list(language_options.keys()).index(st.session_state.language))
-
-# Update session state based on user input
-st.session_state.text = text
-st.session_state.language = language
