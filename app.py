@@ -1,5 +1,3 @@
-# app.py
-
 import os
 from gtts import gTTS
 import streamlit as st
@@ -11,11 +9,21 @@ st.title("Text-to-Speech App")
 text = st.text_area("Enter text here", "یہ ایک ٹیسٹ ہے")  # Default Urdu text
 
 # Language selection
-language = st.selectbox("Select Language", ["en", "en-uk", "en-au", "es", "fr", "ur"])
+language_options = {
+    "British English": "en-uk",
+    "Spanish": "es",
+    "French": "fr",
+    "Arabic": "ar",
+    "Chinese (Mandarin)": "zh",
+    "Urdu": "ur",
+    "Russian": "ru"
+}
+
+language = st.selectbox("Select Language", list(language_options.keys()))
 
 if st.button("Generate Speech"):
     # Create TTS
-    tts = gTTS(text=text, lang=language)
+    tts = gTTS(text=text, lang=language_options[language])
     
     # Save to a temporary file
     temp_file = "output.mp3"
