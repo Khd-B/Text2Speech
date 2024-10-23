@@ -1,23 +1,27 @@
 # app.py
 
+import os
 from gtts import gTTS
-from io import BytesIO
 import streamlit as st
 
 # Title of the app
 st.title("Text-to-Speech App")
 
 # Text input
-text = st.text_area("Enter text here", "Key Atlantic current could collapse soon, 'impacting the entire world for centuries to come,' leading climate scientists warn.")
+text = st.text_area("Enter text here", "Hello! This is a text-to-speech test using Google Text-to-Speech.")
 
 if st.button("Generate Speech"):
     # Create TTS
     tts = gTTS(text=text, lang='en')
-
-    # Save to a BytesIO object
-    audio_bytes = BytesIO()
-    tts.save(audio_bytes)
-    audio_bytes.seek(0)
-
+    
+    # Save to a temporary file
+    temp_file = "output.mp3"
+    tts.save(temp_file)
+    
     # Play audio
-    st.audio(audio_bytes, format='audio/mp3')
+    audio_file = open(temp_file, "rb")
+    st.audio(audio_file.read(), format='audio/mp3')
+    audio_file.close()
+    
+    # Clean up temporary file
+    os.remove(temp_file)
